@@ -1,0 +1,374 @@
+# The list of devices that are covered by this model are at the end of
+# the file, scoll down...
+
+Outside sweden {
+    name      "Sweden"
+    contains  {pHataren1}
+    devices   {wStation jockesTemp brusselsTemp}
+}
+
+Outside pHataren1 {
+    name       "PositivHataren1"
+    contains   {myHouse}
+    connectors {frontDoor}
+    devices    {outsideTemp}
+}
+
+Address aSoderman10 {
+    street       "August Södermansväg"
+    streetNumber 10
+    areaCode     12938
+    city         "Hägersten"
+    country      "Sweden"
+}
+
+Address sics {
+    street       "Isafjordsgatan"
+    streetNumber 22
+    areaCode     16440
+    city         "Kista"
+    country      "Sweden"
+}
+
+# Approximate center of our lot.
+Coordinate myPosition {
+    latitude  59.299428
+    longitude 17.970209
+}
+
+# The house contains three floors, which will contain the rooms.
+Building myHouse {
+    name       "House Frecon-Waller"
+    address    aSoderman10
+    pos        myPosition
+    contains   {ground cellar top}
+    connectors {frontDoor deckDoor}
+}
+
+# The different floors in the house, we might not want to actually
+# model this, but this is a good start.
+Floor ground {
+    name       "Ground Floor"
+    contains   {hall kitchen diningRoom livingRoom bath vilma}
+    connectors {}
+    above      cellar
+    below      top
+}
+Floor cellar {
+    name       "Cellar Floor"
+    contains   {laundry office wine heating garage junk}
+    connectors {}
+    below      ground
+}
+Floor top {
+    name       "Top Floor"
+    contains   {hobby tuva parents gustav simon shower}
+    connectors {}
+    above      ground
+}
+
+######
+# The rooms on the ground floor.
+Room hall {
+    name       "Hallway"
+    connectors {frontDoor deckDoor staircase kitchenOpening livingHall vilmaDoor bathDoor cellarDoor}
+}
+
+Kitchen kitchen {
+    name       "Kitchen"
+    connectors {kitchenOpening diningKitchen}
+}
+
+Room diningRoom {
+    name       "Dining Room"
+    connectors {diningKitchen diningLiving}
+}
+
+Room livingRoom {
+    name       "Living Room"
+    connectors {diningLiving livingHall}
+    devices    {insideTemp}
+}
+
+Bathroom bath {
+    name       "Main Bathroom"
+    connectors {bathDoor}
+}
+
+Bedroom vilma {
+    name       "Vilma"
+    connectors {vilmaDoor}
+}
+
+# Connectors between rooms in ground floor
+Door frontDoor {
+    name    "Front Door"
+    from    pHataren1
+    to      hall
+}
+
+Door deckDoor {
+    name    "Deck Door"
+    from    hall
+    to      pHataren1
+}
+
+Opening staircase {
+    name    "Staircase"
+    from    hall
+    to      hobby
+}
+
+Opening kitchenOpening {
+    name    "Kitchen Opening"
+    from    hall
+    to      kitchen
+}
+
+Door diningKitchen {
+    name    "Door between diningroom and kitchen"
+    from    kitchen
+    to      diningRoom
+}
+
+Opening diningLiving {
+    name    "Opening between dining and living room"
+    from    diningRoom
+    to      livingRoom
+}
+
+Door livingHall {
+    name    "Door between hall and living room"
+    from    livingRoom
+    to      hall
+}
+
+Door vilmaDoor {
+    name    "Door between Vilma bedroom and hall"
+    from    hall
+    to      vilma
+}
+
+Door bathDoor {
+    name    "Door between the main bathroom and the hallway"
+    from    hall
+    to      bath
+}
+
+########
+# Top Floor
+Room hobby {
+    name       "Hobby Room"
+    connectors {staircase tuvaDoor parentsDoor gustavDoor simonDoor showerDoor}
+    devices    {flexibility}
+}
+
+Bedroom tuva {
+    name       "Bedroom Tuva"
+    connectors {tuvaDoor}
+}
+
+Bedroom parents {
+    name       "Main Bedroom"
+    connectors {parentsDoor}
+}
+
+Bedroom gustav {
+    name       "Bedroom Gustav"
+    connectors {gustavDoor}
+}
+
+Bedroom simon {
+    name       "Bedroom Simon"
+    connectors {simonDoor}
+}
+
+Bathroom shower {
+    name       "Bathroom upstairs"
+    connectors {showerDoor}
+}
+
+# The doors and openings on top floor.
+Door tuvaDoor {
+    name    "Tuva Door"
+    from    hobby
+    to      tuva
+}
+
+Door parentsDoor {
+    name    "Parents door"
+    from    parents
+    to      hobby
+}
+
+Door gustavDoor {
+    name   "Gustav door"
+    from   gustav
+    to     hobby
+}
+
+Door simonDoor {
+    name   "Simon Door"
+    from   simon
+    to     hobby
+}
+
+Door showerDoor {
+    name   "Door to bathroom upstairs"
+    from   shower
+    to     hobby
+}
+
+
+######
+# Cellar
+Room laundry {
+    name   "Laundry"
+    connectors {laundryDoor heatingDoor}
+}
+
+Room office {
+    name   "Office"
+    connectors {officeDoor}
+}
+
+Room wine {
+    name  "Wine Cellar"
+    connectors {wineCellarDoor}
+}
+
+Room heating {
+    name  "heating and workshop"
+    connectors {heatingDoor heatingGarageDoor}
+    devices {outsideTemp greenline}
+}
+
+Room garage {
+    name "Garage"
+    connectors {heatingGarageDoor garageDoor}
+}
+
+Room junk {
+    name "Junk storage and staircase"
+    connectors {cellarDoor wineCellarDoor officeDoor laundryDoor}
+}
+
+# Doors in cellar
+Door cellarDoor {
+    name  "Door down to cellar"
+    from  junk
+    to    hall
+}
+
+Door officeDoor {
+    name  "Door to downstairs office"
+    from  office
+    to    junk
+}
+
+Door wineCellarDoor {
+    name  "Wine Cellar door"
+    from  wine
+    to    junk
+}
+Door laundryDoor {
+    name  "Door to laundry"
+    from  laundry
+    to    junk
+}
+Door heatingDoor {
+    name  "Door to heating room"
+    from  heating
+    to    laundry
+}
+Door heatingGarageDoor {
+    name  "Door between garage and heating room"
+    from  garage
+    to    heating
+}
+Door garageDoor {
+    name  "Garage door"
+    from  pHataren1
+    to    garage
+}
+
+#######
+# Habitants
+Person emmanuel {
+    name     "Emmanuel Frécon"
+    worksAt  sics
+    livesAt  aSoderman10
+    sleepsIn parents
+}
+
+#######
+# Devices
+GroundPump greenline {
+    name   "Heat Pump"
+    manufacturer "IVT"
+    model  "Greenline HT+"
+    details "http://www.ivt.se/IVT_Greenline_HT_Plus"
+}
+Thermometer outsideTemp {
+    name    "Heat Pump's temperature sensore outside"
+}
+Thermometer insideTemp {
+    name    "Inner Temperature via TinyNode"
+}
+WeatherStation wStation {
+    name    "weatherStation from pachube.com"
+}
+IndoorStation flexibility {
+    name    "Flexibility combined inner sensor"
+}
+IndoorStation tyndall {
+    name    "Tyndall combined inner sensor"
+}
+SpokenThermometer feltTemp {
+    name    "Temperature as we feel it"
+}
+Thermometer jockesTemp {
+    name    "Temperature via Contiki,6LoWPan,RPL and pachube.com"
+}
+Thermometer brusselsTemp {
+    name    "Live Demo temperature via Contiki,6LoWPan,RPL and cosm.com"
+}
+CalendarEntry waterScheduler {
+    name "Hot Water Production"
+}
+WaterHeater hotWater {
+    name "Controlled Hot Water Heater"
+}
+SpotPrice spot {
+    name "Current Price at Spot, in EUR/kWh"
+}
+Electricity elMeter {
+    name "Landis+Gyr ZMF120ACd"
+    sampling 1000
+}
+StringStore testLS {
+}
+MeasuredSwitch lamp {
+    name "Controlled Lamp"
+}
+MeasuredSwitch hairDryer {
+    name "Controlled Hair Dryer"
+}
+
+####
+# Heating zones in Crossleigh
+GasMeter gasMeter1 {
+    name "Crossleigh Gas Meter - Zone 1"
+}
+GasMeter gasMeter2 {
+    name "Crossleigh Gas Meter - Zone 2"
+}
+GasMeter gasMeter3 {
+    name "Crossleigh Gas Meter - Zone 3"
+}
+GasMeter gasMeter4 {
+    name "Crossleigh Gas Meter - Zone 4"
+}
+CrossleighCombo crossleigh {
+    name "Combo Object gathering many Crossleigh data"
+}

@@ -1,0 +1,250 @@
+# Types all start with uppercase. Builtin types are String, Float,
+# Integer and Boolean. a [] denotes an array. a "-" at the end of a
+# field name denotes that the field is not mandatory (and defaults to
+# an empty value). The definition of a type under a type denotes
+# inheritance.
+
+Space {
+    name String
+    contains Space[]
+    connectors Connector[]
+    devices Device[]
+    inhabitants Person[]
+    Outside {
+    }
+    Building {
+	address Address
+	pos Coordinate
+    }
+    Apartment {
+          number Integer
+    }
+    Floor {
+	above Floor
+	below Floor
+    }
+    Room {
+	Kitchen {
+	}
+	Bedroom {
+	}
+	Office {
+	}
+	Bathroom {
+	}
+    }
+}
+
+Address {
+    street String
+    streetNumber Integer
+    areaCode Integer
+    city String
+    country String
+}
+
+Coordinate {
+    latitude Float
+    longitude Float
+}
+
+# The to and from field in connectors should connect between the
+# "smallest" entities in the Space.  For example, a connector between
+# the outside world and a house shouldn't connect to the building, but
+# rather to the room in the building to which the door leads.
+Connector {
+    name String
+    from Space
+    to Space
+    # For best results, use the from and to field to model the opening
+    # direction of the door, i.e. "to" is the room in which the door
+    # opens.
+    Door {
+	isOpened Boolean
+    }
+    Window {
+	isOpened Boolean
+    }
+    Opening {
+    }
+}
+
+Temperature:Float {
+    intervals {[-273.15,[}
+    unit      "celsius"
+}
+
+Power:Float {
+    intervals {[0,[}
+    unit "watt"
+}
+
+Pressure:Float {
+    intervals {[0,[}
+    unit "mPa"
+}
+
+Humidity:Float {
+    intervals {[0,100]}
+}
+
+Angle:Float {
+    intervals {[0,360]}
+}
+
+TemperatureScale:String {
+    oneOf {FREEZING COLD WARM HOT}
+}
+
+OnOffSwitchValues:Integer {
+    oneOf {0 100}
+}
+
+LuminousIntensity:Integer {
+    intervals {[0,[}
+    unit "candle"
+}
+
+
+Illuminance:Integer {
+    intervals {[0,[}
+    unit "lux"
+}
+
+# Expressed in kW.h
+Energy:Float {
+    intervals {[0,[}
+}
+
+Device {
+    name String
+    ontology UUID
+    LogicalDevice {
+	location Space
+	Weather {
+	    SpokenThermometer {
+		temperature TemperatureScale
+	    }
+	}
+	CalendarEntry {
+	    title String
+	    where String
+	    details String
+	    start String
+	    end String
+	}
+	SpotPrice {
+	    current Float
+	    min Float
+	    max Float
+	}
+	WaterHeater {
+	    state Boolean
+	    hotWater Temperature
+	}
+	StringStore {
+	    status String
+	}
+    }
+    PhysicalDevice {
+	location Space
+	SensorDevice {
+	    Electricity {
+		sampling Integer
+		value Power
+		date Timestamp
+	    }
+	    Weather {
+		Thermometer {
+		    value Temperature
+		}
+		IndoorStation {
+		    temperature Temperature
+		    pressure Pressure
+		    humidity Humidity; # in %
+		    WeatherStation {
+			rain Float;  # in mm
+			windDirection Angle
+			windSpeed Float; # in m/s
+		    }
+		}
+	    }
+	    Switch {
+		status Boolean
+		MeasuredSwitch {
+		    sampling Integer
+		    power Power
+		    energy Energy
+		}
+	    }
+	    GasMeter {
+		energy Energy
+	    }
+	    LightSource {
+		power Power
+		luminousIntensity LuminousIntensity
+		radiationAngle Angle
+		OnOffLightSource {
+		    switch OnOffSwitchValues
+		}
+	    }
+	    LightSensor {
+		max Illuminance
+		currentValue Illuminance
+	    }
+	}
+    }
+    Heating {
+        model String
+        manufacturer String
+        details String; # URL to more details.
+        HeatPump {
+	    heatFluidIn Temperature
+	    heatFluidOut Temperature
+	    compressing Boolean
+	    resistance Power
+	    valve Boolean
+	    radiatorIn Temperature
+	    radiatorOut Temperature
+	    hotWater Temperature
+	    compressor Temperature
+	    room Temperature
+	    outside Temperature
+	    GroundPump {
+		coldFluidIn Temperature
+		coldFluidOut Temperature
+	    }
+	    SoilPump {
+	    }
+	    SeaPump {
+	    }
+	    AirPump {
+	    }
+        }
+    }
+    CrossleighCombo {
+	upperFloorsElectricity Energy
+	lowerFloorElectricity Energy
+	zone2Heating Integer
+	zone4Heating Integer
+	mainGas Integer
+	boilerHouse Temperature
+    }
+}
+
+Person {
+    name String
+    pos Coordinate
+    livesAt Address
+    worksAt Address
+    carries Device[]
+    sleepsIn Bedroom
+    worksIn Office
+    present Boolean
+}
+
+App {
+    status AppStatus
+    devices Device[]
+    totalPower Power
+}

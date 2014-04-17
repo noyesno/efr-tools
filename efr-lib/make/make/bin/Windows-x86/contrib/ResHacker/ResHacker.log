@@ -1,0 +1,6 @@
+[23 jan 2013, 23:44:14]
+S:\dev\common\tcldev\lib\make\make\bin\Windows-x86\contrib\ResHacker\ResHacker.exe -add tclkitsh-8.6b-win32.upx.exe,tclkit-win32.exe,transformer.res,,,
+  Added: ICONGROUP,APPICONS,1053
+  Added: VERSIONINFO,1,1053
+
+Commands completed
